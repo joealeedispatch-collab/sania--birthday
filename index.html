@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Sania! 💖</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  color: white;
+  background: radial-gradient(
+    circle at top, #70265f, #291139, #10091f
+  );
+  overflow-x: hidden;
+}
+
+#fireworks {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  max-width: 750px;
+  margin: 35px auto;
+  padding: 35px 22px;
+  width: calc(100% - 30px);
+  border: 1px solid #ffffff44;
+  border-radius: 28px;
+  background: #ffffff12;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 45px #ff4ca544;
+}
+
+h1 {
+  font-size: clamp(42px, 9vw, 76px);
+  color: #fff;
+  text-shadow:
+    0 0 10px #ff70c8,
+    0 0 25px #ff2fa0,
+    0 0 55px #db2cff;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: brightness(.85); }
+  to   { filter: brightness(1.3); }
+}
+
+.subtitle {
+  color: #ffe0f3;
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.cake {
+  font-size: 100px;
+  margin: 20px 0;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  50% { transform: translateY(-10px); }
+}
+
+.message {
+  color: #ffeaf6;
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+button {
+  border: none;
+  border-radius: 30px;
+  padding: 14px 20px;
+  margin: 7px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary {
+  background: linear-gradient(90deg, #ffb8df, #ff55ae);
+  color: #481234;
+}
+
+.secondary {
+  background: #ffffff20;
+  color: white;
+  border: 1px solid #ffffff55;
+}
+
+button:hover {
+  transform: scale(1.04);
+}
+
+#surprise {
+  display: none;
+  padding: 20px;
+  margin-top: 25px;
+  background: #ff79c522;
+  border: 1px solid #ffaddb88;
+  border-radius: 20px;
+  line-height: 1.8;
+}
+
+#surprise.show {
+  display: block;
+}
+
+footer {
+  color: #ffd2e9;
+  margin-top: 25px;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="card">
+
+  <p>✨ A LITTLE SURPRISE, MADE JUST FOR YOU ✨</p>
+
+  <h1>
+    Happy Birthday<br>
+    Sania! 💖
+  </h1>
+
+  <p class="subtitle">
+    Today the world shines brighter because
+    someone as special as you was born. 🌸
+  </p>
+
+  <div class="cake">🎂</div>
+
+  <p class="message">
+    Dear Sania,<br><br>
+
+    May your life always be filled with happiness,
+    beautiful memories, endless laughter, and love
+    that makes your heart smile.
+
+    May every dream you carry come true, every
+    difficult day lead to something beautiful, and
+    every new year of your life bring you closer
+    to everything you wish for.
+
+    You deserve all the magic this world has to offer.
+
+    Keep smiling, keep shining, and always remember
+    how special you are. 💗
+
+    <br><br>
+    Happy Birthday, Sania! 🎉
+  </p>
+
+  <button class="primary" id="surpriseBtn">
+    Open Your Surprise 🎁
+  </button>
+
+  <button class="secondary" id="musicBtn">
+    🎵 Play Birthday Melody
+  </button>
+
+  <button class="secondary" id="fireworkBtn">
+    🎆 More Fireworks
+  </button>
+
+  <div id="surprise">
+    <h2>One More Wish for You 💝</h2>
+
+    Close your eyes and make a beautiful wish.
+
+    May this year bring you magical beginnings,
+    unforgettable moments, wonderful people,
+    and a thousand reasons to smile.
+
+    <h2>YOU DESERVE THE BEST, SANIA! 💖</h2>
+
+    🌸 ✨ 💗 🎂 💗 ✨ 🌸
+  </div>
+
+  <footer>
+    Made with ❤️ especially for Sania
+  </footer>
+
+</div>
+
+<script>
+// ANIMATED FIREWORKS
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+let w, h, particles = [];
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+const colors = [
+  "#ff5db1", "#ffd166", "#ffffff",
+  "#d7a5ff", "#ff8e72", "#a9f7ff"
+];
+
+function burst(x, y, count = 75) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.PI * 2 * i / count;
+    const speed = 1 + Math.random() * 4;
+
+    particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 70,
+      color: colors[
+        Math.floor(Math.random() * colors.length)
+      ]
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+
+  particles = particles.filter(p => p.life > 0);
+
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.025;
+    p.life--;
+
+    ctx.globalAlpha = p.life / 70;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// Automatic fireworks
+setInterval(() => {
+  burst(
+    Math.random() * w,
+    Math.random() * h * 0.6,
+    55
+  );
+}, 1000);
+
+// Extra fireworks button
+document.getElementById("fireworkBtn")
+.addEventListener("click", () => {
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      burst(
+        Math.random() * w,
+        Math.random() * h * 0.6,
+        100
+      );
+    }, i * 180);
+  }
+});
+
+// Birthday surprise reveal
+document.getElementById("surpriseBtn")
+.addEventListener("click", () => {
+  document.getElementById("surprise")
+    .classList.add("show");
+
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      burst(
+        Math.random() * w,
+        Math.random() * h * 0.6,
+        100
+      );
+    }, i * 180);
+  }
+
+  document.getElementById("surpriseBtn")
+    .textContent = "Surprise Opened! 💖";
+});
+
+// Synthesized birthday melody
+// The browser starts sound only after the visitor taps.
+let audioContext;
+let playing = false;
+let timer;
+let noteIndex = 0;
+
+const notes = [
+  523, 523, 587, 523, 698, 659,
+  523, 523, 587, 523, 784, 698,
+  523, 523, 1047, 880, 698, 659,
+  587, 932, 932, 880, 698, 784, 698
+];
+
+function playNote() {
+  if (!playing) return;
+
+  const now = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.value =
+    notes[noteIndex % notes.length];
+
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.exponentialRampToValueAtTime(0.12, now + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start(now);
+  oscillator.stop(now + 0.3);
+
+  noteIndex++;
+  timer = setTimeout(playNote, 310);
+}
+
+document.getElementById("musicBtn")
+.addEventListener("click", async () => {
+  const btn = document.getElementById("musicBtn");
+
+  if (!playing) {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) {
+      alert("Audio is not supported in this browser.");
+      return;
+    }
+
+    audioContext = audioContext || new AudioContextClass();
+    await audioContext.resume();
+
+    playing = true;
+    btn.textContent = "⏸ Pause Birthday Melody";
+    playNote();
+  } else {
+    playing = false;
+    clearTimeout(timer);
+    btn.textContent = "🎵 Play Birthday Melody";
+  }
+});
+</script>
+
+</body>
+</html>
